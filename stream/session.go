@@ -2,13 +2,12 @@ package stream
 
 import (
 	"context"
-	"runtime"
 	"time"
 
 	"github.com/go-i2p/go-sam-go/common"
 	"github.com/go-i2p/i2pkeys"
-	"github.com/samber/oops"
 	"github.com/go-i2p/logger"
+	"github.com/samber/oops"
 )
 
 // cleanupStreamListener is called by AddCleanup to ensure the listener is closed and the goroutine is cleaned up
@@ -206,10 +205,6 @@ func (s *StreamSession) Listen() (*StreamListener, error) {
 		ctx:        ctx,
 		cancel:     cancel,
 	}
-
-	// Set up cleanup to ensure the listener is closed and the goroutine is cleaned up
-	// This prevents goroutine leaks if the user forgets to call Close()
-	listener.cleanup = runtime.AddCleanup(&listener.cleanup, cleanupStreamListener, listener)
 
 	// Start accepting connections in a goroutine
 	go listener.acceptLoop()
